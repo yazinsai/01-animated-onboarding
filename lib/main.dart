@@ -58,7 +58,7 @@ class ProgressButton extends StatelessWidget {
       width: 65,
       height: 65,
       child: Stack(children: [
-        CustomPaint(size: Size(65, 65), painter: ProgressPainter(20.0)),
+        AnimatedIndicator(duration: const Duration(seconds: 5), size: 65),
         Center(
           child: Container(
             height: 50,
@@ -75,6 +75,55 @@ class ProgressButton extends StatelessWidget {
         )
       ]),
     );
+  }
+}
+
+class AnimatedIndicator extends StatefulWidget {
+  final Duration duration;
+  final double size;
+  const AnimatedIndicator({Key key, this.duration, this.size})
+      : super(key: key);
+
+  @override
+  _AnimatedIndicatorState createState() => _AnimatedIndicatorState();
+}
+
+class _AnimatedIndicatorState extends State<AnimatedIndicator>
+    with TickerProviderStateMixin {
+  Animation<double> animation;
+  AnimationController controller;
+
+  @override
+  void initState() {
+    controller = AnimationController(duration: widget.duration, vsync: this);
+    animation = Tween(begin: 0.0, end: 100.0).animate(controller)
+      ..addListener(() {
+        setState(() {});
+      })
+      ..addStatusListener((status) {
+        if (status == AnimationStatus.completed) {
+          controller.reset();
+        }
+      });
+    controller.forward();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+        animation: animation,
+        builder: (context, child) {
+          return CustomPaint(
+              size: Size(widget.size, widget.size),
+              painter: ProgressPainter(animation.value));
+        });
   }
 }
 
@@ -120,5 +169,5 @@ class ProgressPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(CustomPainter old) => false;
+  bool shouldRepaint(CustomPainter old) => true;
 }
