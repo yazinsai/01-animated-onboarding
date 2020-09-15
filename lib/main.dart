@@ -19,8 +19,15 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class MainPage extends StatelessWidget {
+class MainPage extends StatefulWidget {
   const MainPage({Key key}) : super(key: key);
+
+  @override
+  _MainPageState createState() => _MainPageState();
+}
+
+class _MainPageState extends State<MainPage> {
+  PageController pageController = new PageController();
 
   @override
   Widget build(BuildContext context) {
@@ -28,43 +35,67 @@ class MainPage extends StatelessWidget {
       backgroundColor: Colors.white,
       body: SafeArea(
         child: Container(
-            child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Image.asset("./assets/hero-1.png"),
-            Text("Boost your traffic"),
-            Text("Outreach to many social networks to improve your statistics"),
-            ProgressButton(),
-            Text("Skip")
-          ],
-        )),
+            child: PageView(controller: pageController, children: [
+          Column(
+            children: [
+              Image.asset("./assets/hero-1.png"),
+              Text("Boost your traffic"),
+              Text(
+                  "Outreach to many social networks to improve your statistics"),
+              ProgressButton(onNext: nextPage),
+              Text("Skip")
+            ],
+          ),
+          Column(
+            children: [
+              Image.asset("./assets/hero-2.png"),
+              Text("Give the best solution"),
+              Text("We will give best solution for your business isues"),
+              ProgressButton(onNext: nextPage),
+              Text("Skip")
+            ],
+          ),
+          Column(
+            children: [
+              Image.asset("./assets/hero-3.png"),
+              Text("Reach the target"),
+              Text("With our help, it will be easier to achieve your goals"),
+              ProgressButton(onNext: () => print('Onboarding complete!')),
+              Text("Skip")
+            ],
+          ),
+        ])),
       ),
     );
+  }
+
+  void nextPage() {
+    pageController.nextPage(
+        duration: const Duration(milliseconds: 200),
+        curve: Curves.easeInOutBack);
   }
 }
 
 class ProgressButton extends StatelessWidget {
-  const ProgressButton({
-    Key key,
-  }) : super(key: key);
-
-  void onComplete() {
-    print('onComplete');
-  }
+  final VoidCallback onNext;
+  const ProgressButton({Key key, this.onNext}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 65,
-      height: 65,
+      width: 75,
+      height: 75,
       child: Stack(children: [
         AnimatedIndicator(
           duration: const Duration(seconds: 10),
-          size: 65,
-          callback: onComplete,
+          size: 75,
+          callback: onNext,
         ),
         Center(
-          child: NextButton(),
+          child: GestureDetector(
+            child: NextButton(),
+            onTap: onNext,
+          ),
         )
       ]),
     );
@@ -72,15 +103,13 @@ class ProgressButton extends StatelessWidget {
 }
 
 class NextButton extends StatelessWidget {
-  const NextButton({
-    Key key,
-  }) : super(key: key);
+  const NextButton({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 50,
-      width: 50,
+      height: 60,
+      width: 60,
       child: Center(
         child: SvgPicture.asset(
           "./assets/arrow.svg",
