@@ -22,6 +22,55 @@ class MyApp extends StatelessWidget {
   }
 }
 
+class MainPage extends StatefulWidget {
+  const MainPage({Key key}) : super(key: key);
+
+  @override
+  _MainPageState createState() => _MainPageState();
+}
+
+class _MainPageState extends State<MainPage> {
+  PageController pageController = new PageController(initialPage: 0);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: SafeArea(
+        child: Container(
+            child: PageView(
+                controller: pageController,
+                physics: NeverScrollableScrollPhysics(),
+                children: [
+              Slide(
+                  hero: Image.asset("./assets/hero-1.png"),
+                  title: "Boost your traffic",
+                  subtitle:
+                      "Outreach to many social networks to improve your statistics",
+                  onNext: nextPage),
+              Slide(
+                  hero: Image.asset("./assets/hero-2.png"),
+                  title: "Give the best solution",
+                  subtitle:
+                      "We will give best solution for your business isues",
+                  onNext: nextPage),
+              Slide(
+                  hero: Image.asset("./assets/hero-3.png"),
+                  title: "Reach the target",
+                  subtitle:
+                      "With our help, it will be easier to achieve your goals",
+                  onNext: () => print('Onboarding done!')),
+            ])),
+      ),
+    );
+  }
+
+  void nextPage() {
+    pageController.nextPage(
+        duration: const Duration(milliseconds: 200), curve: Curves.ease);
+  }
+}
+
 class Slide extends StatelessWidget {
   final Image hero;
   final String title;
@@ -37,7 +86,7 @@ class Slide extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          hero,
+          Expanded(child: hero),
           Padding(
             padding: const EdgeInsets.all(20),
             child: Column(
@@ -67,56 +116,13 @@ class Slide extends StatelessWidget {
               "Skip",
               style: kSubtitleStyle,
             ),
+          ),
+          SizedBox(
+            height: 4,
           )
         ],
       ),
     );
-  }
-}
-
-class MainPage extends StatefulWidget {
-  const MainPage({Key key}) : super(key: key);
-
-  @override
-  _MainPageState createState() => _MainPageState();
-}
-
-class _MainPageState extends State<MainPage> {
-  PageController pageController = new PageController();
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: SafeArea(
-        child: Container(
-            child: PageView(controller: pageController, children: [
-          Slide(
-              hero: Image.asset("./assets/hero-1.png"),
-              title: "Boost your traffic",
-              subtitle:
-                  "Outreach to many social networks to improve your statistics",
-              onNext: nextPage),
-          Slide(
-              hero: Image.asset("./assets/hero-2.png"),
-              title: "Give the best solution",
-              subtitle: "We will give best solution for your business isues",
-              onNext: nextPage),
-          Slide(
-              hero: Image.asset("./assets/hero-3.png"),
-              title: "Reach the target",
-              subtitle:
-                  "With our help, it will be easier to achieve your goals",
-              onNext: () => print('Onboarding done!')),
-        ])),
-      ),
-    );
-  }
-
-  void nextPage() {
-    pageController.nextPage(
-        duration: const Duration(milliseconds: 200),
-        curve: Curves.easeInOutBack);
   }
 }
 
