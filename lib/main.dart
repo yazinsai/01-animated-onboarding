@@ -72,7 +72,7 @@ class _MainPageState extends State<MainPage> {
 }
 
 class Slide extends StatelessWidget {
-  final Image hero;
+  final Widget hero;
   final String title;
   final String subtitle;
   final VoidCallback onNext;
