@@ -18,6 +18,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       home: MainPage(),
+      debugShowCheckedModeBanner: false,
     );
   }
 }
@@ -59,7 +60,16 @@ class _MainPageState extends State<MainPage> {
                   title: "Reach the target",
                   subtitle:
                       "With our help, it will be easier to achieve your goals",
-                  onNext: () => print('Onboarding done!')),
+                  onNext: nextPage),
+              Scaffold(
+                backgroundColor: Colors.white,
+                body: Center(
+                  child: Text(
+                    'Be kind to yourself',
+                    style: kTitleStyle,
+                  ),
+                ),
+              )
             ])),
       ),
     );
@@ -143,31 +153,22 @@ class ProgressButton extends StatelessWidget {
         ),
         Center(
           child: GestureDetector(
-            child: NextButton(),
+            child: Container(
+              height: 60,
+              width: 60,
+              child: Center(
+                child: SvgPicture.asset(
+                  "./assets/arrow.svg",
+                  width: 10,
+                ),
+              ),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(99), color: blue),
+            ),
             onTap: onNext,
           ),
         )
       ]),
-    );
-  }
-}
-
-class NextButton extends StatelessWidget {
-  const NextButton({Key key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 60,
-      width: 60,
-      child: Center(
-        child: SvgPicture.asset(
-          "./assets/arrow.svg",
-          width: 10,
-        ),
-      ),
-      decoration:
-          BoxDecoration(borderRadius: BorderRadius.circular(99), color: blue),
     );
   }
 }
